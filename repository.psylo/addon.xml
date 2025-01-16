@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="repository.psylo" name="Psylo XBOX, Series X/S add-on repository" version="0.0.1" provider-name="Psylo">
+<addon id="repository.psylo" name="Psylo XBOX, Series X/S add-on repository" version="1.0.0" provider-name="Psylo">
     <extension point="xbmc.addon.repository" name="Psylos Repository">
         <dir>
-            <info compressed="false">https://raw.githubusercontent.com/psylo-dev/psylo.omega.repository/main/repo/zips/addons.xml</info>
-            <checksum>https://raw.githubusercontent.com/psylo-dev/psylo.omega.repository/main/repo/zips/addons.xml.md5</checksum>
-            <datadir zip="true">https://raw.githubusercontent.com/psylo-dev/psylo.omega.repository/main/repo/zips/</datadir>
+            <info compressed="false">https://raw.githubusercontent.com/psylo-dev/psylo.omega.repository/master/repo/zips/addons.xml</info>
+            <checksum>https://raw.githubusercontent.com/psylo-dev/psylo.omega.repository/master/repo/zips/addons.xml.md5</checksum>
+            <datadir zip="true">https://raw.githubusercontent.com/psylo-dev/psylo.omega.repository/master/repo/zips/</datadir>
         </dir>
     </extension>
     <extension point="xbmc.addon.metadata">
