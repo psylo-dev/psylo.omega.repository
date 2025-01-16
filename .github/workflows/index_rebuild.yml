@@ -11,25 +11,33 @@ jobs:
     - name: Checkout Repository
       uses: actions/checkout@v3
 
-    - name: Set Variables
-      id: vars
+    - name: Scan for ZIP files and update index.html
       run: |
-        ADDON_ID=$(basename "$(find ./zips -mindepth 1 -maxdepth 1 -type d)")
-        VERSION=$(basename "$(find ./zips/$ADDON_ID -mindepth 1 -maxdepth 1 -type f)" | sed -E 's/.*-([0-9]+\.[0-9]+\.[0-9]+)\.zip$/\1/')
-        echo "ADDON_ID=${ADDON_ID}" >> $GITHUB_ENV
-        echo "VERSION=${VERSION}" >> $GITHUB_ENV
+        # Verzeichnis festlegen
+        REPO_DIR="repo"
 
-    - name: Update index.html
-      run: |
-        ZIP_FILE="${ADDON_ID}-${VERSION}.zip"
-        sed -i "s|<a href=.*>|<a href=\"$ZIP_FILE\">$ZIP_FILE</a>|" index.html
+        # Index-Datei erstellen oder leeren
+        INDEX_FILE="${REPO_DIR}/index.html"
+        echo "<html><body>" > "$INDEX_FILE"
+
+        # Alle ZIP-Dateien scannen
+        find "$REPO_DIR" -type f -name "*.zip" | while read ZIP_FILE; do
+          # Relativen Pfad zur ZIP-Datei generieren
+          RELATIVE_PATH=$(realpath --relative-to="$REPO_DIR" "$ZIP_FILE")
+
+          # Link in index.html hinzufügen
+          echo "<a href=\"$RELATIVE_PATH\">$(basename "$RELATIVE_PATH")</a><br>" >> "$INDEX_FILE"
+        done
+
+        # HTML-Dokument abschließen
+        echo "</body></html>" >> "$INDEX_FILE"
 
     - name: Commit Changes
       run: |
         git config user.name "github-actions[bot]"
         git config user.email "github-actions[bot]@users.noreply.github.com"
-        git add index.html
-        git commit -m "Update index.html with $ZIP_FILE"
+        git add repo/index.html
+        git commit -m "Update index.html with links to all ZIP files"
 
     - name: Push Changes
       uses: ad-m/github-push-action@v0.6.0
