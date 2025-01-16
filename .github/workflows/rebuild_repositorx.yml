@@ -1,0 +1,37 @@
+name: Run Python Repo XML Generator
+
+on:
+  workflow_dispatch:
+
+jobs:
+  run-repo-xml-generator:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository
+      uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: "3.x"
+
+    - name: Install Requirements (if any)
+      run: |
+        if [ -f "requirements.txt" ]; then
+          pip install -r requirements.txt
+        fi
+
+    - name: Run _repo_xml_generator.py
+      run: |
+        python _repo_xml_generator.py
+
+    - name: Commit and Push Changes
+      run: |
+        git config user.name "github-actions[bot]"
+        git config user.email "github-actions[bot]@users.noreply.github.com"
+        git add .
+        git commit -m "Run _repo_xml_generator.py and update generated files"
+        git push
+      env:
+        GITHUB_TOKEN: ${{ secrets.PUSH }}
